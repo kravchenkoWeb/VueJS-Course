@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", function() {
         el: "#app",
         data: {
             helloWorld: "Hello 1 world!"
+        },
+        methods: {
+            changeTitle: function(event) {
+                this.helloWorld = event.target.value;
+            }
         }
     });
 });
