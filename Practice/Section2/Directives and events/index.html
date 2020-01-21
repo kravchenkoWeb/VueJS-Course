@@ -17,10 +17,16 @@
 		<hr>
 		<b style="font-size: 30px;">EVENT EXAMPLES:</b>
 		<hr>
-		<p>{{counter}}</p>
+		<p>{{counter * 2 > 10 ? 'Greater than 10' : 'Smaller then 10'}}</p>
 		<button v-on:click="increase(2, $event)">click me</button>
+		<button v-on:click="counter++">click me</button>
 		<p v-on:mousemove="updateCoordinates">Coordinates: {{ x }} / {{ y }} - <span v-on:mousemove.stop="">DEAD SPOT</span></p>	
 		<input type="text" v-on:keyup.enter.space="aletMe">
+		<hr>
+		<b style="font-size: 30px;">TWO WAY BINDING:</b>
+		<hr>
+		<input type="text" v-model="name">
+		<p>{{ name }}</p>
 	</div>
 
 	<!-- Put this in the HTML section in JSFiddle! -->
@@ -35,7 +41,8 @@
 				finishedLink: '<a href="https://www.google.com/">Google</a>',
 				counter: 0,
 				x: 0,
-				y: 0
+				y: 0,
+				name: 'Vitaliy'
 			},
 			methods: {
 				sayHello: function() {
