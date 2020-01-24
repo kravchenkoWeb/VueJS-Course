@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Monster Slayer</title>
+    <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="css/foundation.min.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+    <div id="app">
+        <section class="row">
+            <div class="small-6 columns">
+                <h1 class="text-center">YOU</h1>
+                <div class="healthbar">
+                    <div class="healthbar text-center" :style="{width: usersHP + '%'}"
+                        style="background-color: green; margin: 0; color: white;">
+                        {{usersHP}}
+                    </div>
+                </div>
+            </div>
+            <div class="small-6 columns">
+                <h1 class="text-center">MONSTER</h1>
+                <div class="healthbar">
+                    <div class="healthbar text-center" :style="{width: monstersHP + '%'}"
+                        style="background-color: green; margin: 0; color: white;">
+                        {{monstersHP}}
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="row controls" v-if="!gameStarted">
+            <div class="small-12 columns">
+                <button id="start-game" @click="newGame()">START NEW GAME</button>
+            </div>
+        </section>
+        <section class="row controls" v-if="gameStarted">
+            <div class="small-12 columns">
+                <button id="attack" @click="gameIteration">ATTACK</button>
+                <button id="special-attack" @click="gameIterationSpecial">SPECIAL ATTACK</button>
+                <button id="heal" @click="gameIterationHeal">HEAL</button>
+                <button id="give-up" @click="giveUp">GIVE UP</button>
+            </div>
+        </section>
+        <section class="row log">
+            <div class="small-12 columns">
+                <ul v-if="gameStarted">
+                    <li>
+                        Game have been started!
+                    </li>
+                    <template v-for="gameLog in gameLogs" :key="gameLog">
+                        <li>{{gameLog}}</li>
+                    </template>
+
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                gameStarted: false,
+                usersHP: 100,
+                monstersHP: 100,
+                gameLogs: []
+            },
+            methods: {
+                giveUp: function () {
+                    let usersDecision = confirm("Are you sure?");
+                    if (usersDecision) {
+                        this.gameStarted = false;
+                        this.usersHP = 100;
+                        this.monstersHP = 100;
+                        this.gameLogs = [];
+                    } else {
+                        alert("Right! Don't give up!");
+                    }
+                },
+                newGame: function () {
+                    this.gameStarted = true;
+                    this.usersHP = 100;
+                    this.monstersHP = 100;
+                    this.gameLogs = [];
+                },
+                getRandomInt: function (max) {
+                    return Math.floor(Math.random() * Math.floor(max));
+                },
+                gameIteration: function (event) {
+                    let currentDamageUser = this.getRandomInt(5),
+                        currentDamageMonster = this.getRandomInt(10);
+
+                    this.usersHP -= currentDamageMonster;
+                    this.monstersHP -= currentDamageUser;
+                    this.gameLogs.push("Monster dealt " + currentDamageMonster + " damage to user");
+                    this.gameLogs.push("User dealt " + currentDamageUser + " damage to monster");
+
+                    if (this.usersHP <= 0) {
+                        let lostDecision = confirm("You lost, wanna play again?");
+                        if (lostDecision) {
+                            this.gameStarted = false;
+                            this.newGame();
+                        } else {
+                            this.gameStarted = false;
+                        }
+                    } else if (this.monstersHP <= 0) {
+                        let winDecision = confirm("You won, wanna play again?");
+                        if (winDecision) {
+                            this.newGame();
+                        } else {
+                            this.gameStarted = false;
+                        }
+                    }
+                },
+                gameIterationSpecial: function() {
+                    let currentDamageUser = this.getRandomInt(10),
+                        currentDamageMonster = this.getRandomInt(10);
+
+                    this.usersHP -= currentDamageMonster;
+                    this.monstersHP -= currentDamageUser;
+                    this.gameLogs.push("Monster dealt " + currentDamageMonster + " damage to user");
+                    this.gameLogs.push("User dealt " + currentDamageUser + " damage to monster");
+
+                    if (this.usersHP <= 0) {
+                        let lostDecision = confirm("You lost, wanna play again?");
+                        if (lostDecision) {
+                            this.gameStarted = false;
+                            this.newGame();
+                        } else {
+                            this.gameStarted = false;
+                        }
+                    } else if (this.monstersHP <= 0) {
+                        let winDecision = confirm("You won, wanna play again?");
+                        if (winDecision) {
+                            this.newGame();
+                        } else {
+                            this.gameStarted = false;
+                        }
+                    }
+                },
+                gameIterationHeal: function() {
+                   let currentDamageMonster = this.getRandomInt(10),
+                        usersHealing = 12;
+
+                    if(this.usersHP < 100) {
+                        this.usersHP += usersHealing;
+                        this.gameLogs.push("User headled on " + usersHealing + " points");
+                    } else {
+                        this.usersHP = 100;
+                    }
+
+                    this.usersHP -= currentDamageMonster;
+                    this.gameLogs.push("Monster dealt " + currentDamageMonster + " damage to user");
+                    
+                    
+                }
+            },
+        });
+    </script>
+</body>
+
+</html>
